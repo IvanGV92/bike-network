@@ -1,44 +1,47 @@
-function Bike (id, color, model, location)  {
-    this.id = id;
-    this.color = color;
-    this.model = model;
-    this.location = location;
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+let bikeSchema = new Schema({
+    code: Number,
+    color: String,
+    model: String,
+    location: {
+        type: [Number],
+        index: { 
+                type: '2dsphere', 
+                sparse: true}
+    }
+});
+
+bikeSchema.statics.createInstance = function(code,color,model,location){
+    return new this({
+        code: code,
+        color: color,
+        model: model,
+        location: location
+    });
 };
 
-Bike.prototype.toString = function() {
-    return `id: ${this.id}  | color:   ${this.color}`;
+bikeSchema.methods.toString = ()=>{
+    return `code: ${this.code} | color: ${this.color}`;
 };
 
-Bike.allBikes = [];
-Bike.add = (bike)=>{
-    Bike.allBikes.push(bike);
+bikeSchema.statics.allBikes = function(callback){
+    return this.find({},callback);
 };
 
-Bike.findById = (bikeId)=>{
-    let aBike = Bike.allBikes.find(x => x.id == bikeId);
-    if (aBike)
-        return aBike;
-    else    
-        throw new Error(`We didn't find a bike with the id ${bikeId}`);    
+bikeSchema.statics.add = function(aBike, callback){
+    this.create(aBike,callback);
 };
 
+bikeSchema.statics.findByCode = function(aCode, callback){
+    return this.findOne({ code: aCode },callback);
+};
 
+bikeSchema.statics.removeByCode = function(aCode, callback){
+    console.log(aCode);
+    return this.deleteOne({ code: aCode },callback);
+};
 
- Bike.removeById = (bikeId)=>{
-     for (let i=0; i< Bike.allBikes.length;i++){
-         if (Bike.allBikes[i].id == bikeId){
-            Bike.allBikes.splice(i, 1);
-            break;
-         }
-     }
- };
-
-let bike1 = new Bike(1, 'red', 'urban', [-34.60012424, -583861497]);
-
-let bike2 = new Bike(2, 'white', 'urban', [-34.596932, -58.3808287]);
-
-Bike.add(bike1);
-Bike.add(bike2);
-
-
-module.exports = Bike;
+module.exports = mongoose.model('Bike',bikeSchema);
