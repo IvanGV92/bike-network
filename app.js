@@ -8,9 +8,20 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var bikesRouter = require('./routes/bikes');
 var bikesAPIRouter = require('./routes/api/bikes');
+var usersAPIRouter = require('./routes/api/users');
+
 
 
 var app = express();
+
+var mongoose = require('mongoose');
+
+var mongoDB = 'mongodb://localhost/bike_network';
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on('error',console.error.bind(console, 'MongoDB connection error:'));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,6 +37,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/bikes',bikesRouter);
 app.use('/api/bikes',bikesAPIRouter);
+app.use('/api/users',usersAPIRouter);
+
 
 
 
