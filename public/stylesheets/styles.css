@@ -10371,3 +10371,10 @@ body {
   height: 800px;
   margin: 0 auto;
 }
+
+body {
+  padding: 50px;
+  padding-top: 5rem;
+}
+
+

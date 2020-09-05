@@ -13,8 +13,8 @@ block content
  br
 
  form(action=`/bikes/${biki.id}/update` method='post')
-  label(for='id') ID:
-  input#color(type='text' name='id' value=biki.id)
+  label(for='code') Code:
+  input#color(type='text' name='name' value=biki.code)
   br
   label(for='color') Color:
   input#color(type='text' name='color' value=biki.color)
