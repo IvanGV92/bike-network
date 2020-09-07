@@ -1,10 +1,10 @@
-						   
+require('dotenv').config();						   
 					
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const passport = require('./config/passport');
 const session = require('express-session');
 const jwt = require('jsonwebtoken');
@@ -12,18 +12,17 @@ const User = require('./models/user');
 const Token = require('./models/token');
 							
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var bikesRouter = require('./routes/bikes');
-var bikesAPIRouter = require('./routes/api/bikes');
-var usersAPIRouter = require('./routes/api/users');
-var tokenRouter = require('./routes/token');
-var authAPIRouter = require('./routes/api/auth');
-
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const bikesRouter = require('./routes/bikes');
+const bikesAPIRouter = require('./routes/api/bikes');
+const usersAPIRouter = require('./routes/api/users');
+const tokenRouter = require('./routes/token');
+const authAPIRouter = require('./routes/api/auth');
 const store = new session.MemoryStore;
  
 
-var app = express();
+const app = express();
 
 app.set('secretKey','jwt_psss_11872652khasdh?');
 app.use(session({
@@ -34,12 +33,14 @@ app.use(session({
   secret: `bike_networl1234567654%^&*()`
 }));
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var mongoDB = 'mongodb://localhost/bike_network';
+
+const mongoDB =process.env.MONGO_URI;
+mongoose.set('useNewUrlParser', true);
 mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error',console.error.bind(console, 'MongoDB connection error:'));
 
 // view engine setup
@@ -129,7 +130,7 @@ app.post('/resetPassword', function(req,res){
 		
 
 app.use('/', indexRouter);
-app.use('/users', loggedIn,usersRouter);
+app.use('/users',loggedIn, usersRouter);
 app.use('/bikes',loggedIn, bikesRouter);
 									
 

@@ -1,4 +1,4 @@
-var Bike = require('../models/bike');
+const Bike = require('../models/bike');
 
 module.exports ={
 

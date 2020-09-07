@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var Bike = require('../../models/bike');
-var request = require('request');
-var server = require('../../bin/www');
+const mongoose = require('mongoose');
+const Bike = require('../../models/bike');
+const request = require('request');
+const server = require('../../bin/www');
 
 
-var base_url = "http://localhost:3000/api/bikes";
+const base_url = "http://localhost:3000/api/bikes";
 
 describe('Testing Bikes', function() {
     afterEach(function(done) {
@@ -32,8 +32,8 @@ describe('Testing Bikes', function() {
 
     describe('POST Bikes /create', () => {
         it('STATUS 200', (done) => {
-            var headers = {'content-type' : 'application/json'};
-            var aBike = '{ "code": 10, "color": "red", "model": "urban", "lat": 48.3, "lon": 2.8 }';
+            let headers = {'content-type' : 'application/json'};
+            let aBike = '{ "code": 10, "color": "red", "model": "urban", "lat": 48.3, "lon": 2.8 }';
     
             request.post({
                 headers: headers,
@@ -53,11 +53,11 @@ describe('Testing Bikes', function() {
 
     describe('POST Bikes /update', () => {
         it('STATUS 203', (done) => {
-            var aBike1 = Bike.createInstance(10, "red", "urban", [48.3, 2.8]);
+            let aBike1 = Bike.createInstance(10, "red", "urban", [48.3, 2.8]);
             Bike.add(aBike1);
     
-            var headers = {'content-type' : 'application/json'};
-            var aBike = '{ "code": 10, "color": "blue", "model": "sport", "lat": 47.2, "lon": 2.5 }';
+            let headers = {'content-type' : 'application/json'};
+            let aBike = '{ "code": 10, "color": "blue", "model": "sport", "lat": 47.2, "lon": 2.5 }';
     
             request.post({
                 headers: headers,
@@ -78,14 +78,14 @@ describe('Testing Bikes', function() {
 
     describe('POST Bikes /delete', () => {
         it('STATUS 204', (done) => {
-            var aBike1 = Bike.createInstance(1, "red", "sport", [47.8 ,3.25]);
-            var aBike2 = Bike.createInstance(2, "white", "urban", [48.1, 3.21]);
+            let aBike1 = Bike.createInstance(1, "red", "sport", [47.8 ,3.25]);
+            let aBike2 = Bike.createInstance(2, "white", "urban", [48.1, 3.21]);
             
             Bike.add(aBike1);
             Bike.add(aBike2);
     
-            var headers = {'content-type' : 'application/json'};
-            var aBike = '{"code": 1}';
+            let headers = {'content-type' : 'application/json'};
+            let aBike = '{"code": 1}';
     
             request.delete({
                 headers: headers,
