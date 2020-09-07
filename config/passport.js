@@ -20,7 +20,7 @@ passport.use(new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL:  process.env.HOST+"/auth/google/callback"
   },
-  function(request, accessToken, refreshToken, profile, done) {
+  function(request, accessToken, refreshToken, profile, callback) {
     User.findOrCreateByGoogle(profile, function (err, user) {
       return callback(err, user);
     });

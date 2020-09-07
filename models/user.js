@@ -37,7 +37,8 @@ let userSchema = new Schema ({
     verified: {
         type: Boolean,
         default: false
-    }
+    },
+    googleId: String
 });
 
 userSchema.plugin(uniqueValidator, {message: 'The {PATH} already exists with another user.'});
@@ -102,18 +103,19 @@ userSchema.statics.findOrCreateByGoogle = function findOneOrCreate(condition, ca
     console.log(condition);
     self.findOne({
         $or:[
-            {'googleId':condition.id},{ 'email': condition.emails[0].value}
+            { googleId: condition.id},{ email: condition.emails[0].value}
         ]}, (err, result)=>{
             if(result){
                 callback(err,result);
             } else{
                 console.log('--------------------CONDITION----------------');
                 let values = {};
+                console.log(condition);
                 values.googleId = condition.id;
                 values.email = condition.emails[0].value;
                 values.name = condition.displayName || 'NAMELESS';
                 values.verified = true;
-                values.password = condition._json.etag;
+                values.password = crypto.randomBytes(16).toString('hex');
                 console.log('------------------VALUES----------------');
                 console.log(values);
                 self.create(values, (err, result)=>{
