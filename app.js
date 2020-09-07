@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const passport = require('./config/passport');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const jwt = require('jsonwebtoken');
 const User = require('./models/user');
 const Token = require('./models/token');
@@ -19,10 +20,24 @@ const bikesAPIRouter = require('./routes/api/bikes');
 const usersAPIRouter = require('./routes/api/users');
 const tokenRouter = require('./routes/token');
 const authAPIRouter = require('./routes/api/auth');
-const store = new session.MemoryStore;
+
+let store;
+if(process.env.NODE_ENV === 'development'){
+  store = new session.MemoryStore;
+}else{
+  store = new MongoDBStore({
+    uri: process.env.MONGO_URI,
+    collection: 'sessions'
+  });
+  store.on('error',function(error){
+    assert.ifError(error);
+    assert.ok(false);
+  })
+}
+
  
 
-const app = express();
+let app = express();
 
 app.set('secretKey','jwt_psss_11872652khasdh?');
 app.use(session({
@@ -34,6 +49,7 @@ app.use(session({
 }));
 
 const mongoose = require('mongoose');
+const { assert } = require('console');
 
 
 const mongoDB =process.env.MONGO_URI;
@@ -148,6 +164,18 @@ app.use('/googlee77bb0fca0989f05.html',function(req, res){
   res.sendFile('publics/googlee77bb0fca0989f05.html');
 });
 
+app.get('/auth/google',
+  passport.authenticate('google', { scope: 
+      [ 'https://www.googleapis.com/auth/plus.login',
+      , 'https://www.googleapis.com/auth/plus.profile.emails.read',
+    'profile', 'email' ] }
+));
+
+app.get( '/auth/google/callback', 
+    passport.authenticate( 'google', { 
+        successRedirect: '/',
+        failureRedirect: '/error'
+}));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
