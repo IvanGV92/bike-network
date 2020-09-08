@@ -139,6 +139,9 @@ app.use('/api/bikes',validateUser,bikesAPIRouter);
 app.use('/api/users',usersAPIRouter);
 app.use('/token',tokenRouter);
 
+app.use('/privacy_policy',function(req, res){
+  res.sendFile('publics/privacy_policy.html');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -155,6 +158,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 function loggedIn(req,res,next){
   if(req.user){
