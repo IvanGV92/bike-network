@@ -12,7 +12,7 @@ exports.bike_list = (req,res)=>{
 
 exports.bike_create = (req,res)=>{
 
-    var biki = new Bike({ code: req.body.code, color: req.body.color, model: req.body.model });
+    let biki = new Bike({ code: req.body.code, color: req.body.color, model: req.body.model });
   
     biki.location = [req.body.lat, req.body.lon];
 

@@ -20,7 +20,7 @@ module.exports = {
     },
 
     forgotPassword: function(req, res, next) {
-        Usuario.findOne({ email: req.body.email }, function(err, user) {
+        User.findOne({ email: req.body.email }, function(err, user) {
             if (!user) return res.status(401).json({ message: "User does not exists", data: null });
             usuario.resetPassword(function(err) {
                 if (err) { return next(err); }
